@@ -6,6 +6,7 @@ public class Config {
 
     @Expose boolean isAutofishEnabled = true;
     @Expose boolean multiRod = false;
+    @Expose boolean isOpenWaterDetectEnabled = true;
     @Expose boolean noBreak = false;
     @Expose boolean persistentMode = false;
     @Expose boolean useSoundDetection = false;
@@ -16,6 +17,9 @@ public class Config {
 
     public boolean isAutofishEnabled() {
         return isAutofishEnabled;
+    }
+    public boolean isOpenWaterDetectEnabled() {
+        return isOpenWaterDetectEnabled;
     }
 
     public boolean isMultiRod() {
@@ -73,6 +77,10 @@ public class Config {
 
     public void setClearLagRegex(String clearLagRegex) {
         this.clearLagRegex = clearLagRegex;
+    }
+
+    public void setOpenWaterDetectEnabled(boolean openWaterDetectEnabled) {
+        isOpenWaterDetectEnabled = openWaterDetectEnabled;
     }
 
     /**
