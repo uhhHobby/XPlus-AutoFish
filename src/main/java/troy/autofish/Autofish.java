@@ -31,7 +31,8 @@ public class Autofish {
     private MinecraftClient client;
     private FabricModAutofish modAutofish;
     private FishMonitorMP fishMonitorMP;
-
+    private boolean alreadyAlertOP = false;
+    private boolean alreadyPassOP = false;
     private boolean hookExists = false;
     private long hookRemovedAt = 0L;
 
@@ -180,18 +181,26 @@ public class Autofish {
         for(int yi = -2; yi <= 2; yi++){
             if(!(BlockPos.stream(x - 2, y + yi, z - 2, x + 2, y + yi, z + 2).allMatch((blockPos ->
                     // every block is water
-                        bobber.getEntityWorld().getBlockState(blockPos).getBlock() == Blocks.WATER
-                    )) || BlockPos.stream(x - 2, y + yi, z - 2, x + 2, y + yi, z + 2).allMatch((blockPos ->
+                    bobber.getEntityWorld().getBlockState(blockPos).getBlock() == Blocks.WATER
+            )) || BlockPos.stream(x - 2, y + yi, z - 2, x + 2, y + yi, z + 2).allMatch((blockPos ->
                     // or every block is air or lily pad
-                        bobber.getEntityWorld().getBlockState(blockPos).getBlock() == Blocks.AIR
-                        || bobber.getEntityWorld().getBlockState(blockPos).getBlock() == Blocks.LILY_PAD
+                    bobber.getEntityWorld().getBlockState(blockPos).getBlock() == Blocks.AIR
+                            || bobber.getEntityWorld().getBlockState(blockPos).getBlock() == Blocks.LILY_PAD
             )))){
                 // didn't pass the check
-                bobber.getPlayerOwner().sendMessage(Text.translatable("info.autofish.open_water_detection.fail"),true);
-                flag =false;
+                if(!alreadyAlertOP){
+                    bobber.getPlayerOwner().sendMessage(Text.translatable("info.autofish.open_water_detection.fail"),true);
+                    alreadyAlertOP = true;
+                    alreadyPassOP = false;
+                }
+                flag = false;
             }
         }
-        if(flag) bobber.getPlayerOwner().sendMessage(Text.translatable("info.autofish.open_water_detection.success"),true);
+        if(flag && !alreadyPassOP) {
+            bobber.getPlayerOwner().sendMessage(Text.translatable("info.autofish.open_water_detection.success"),true);
+            alreadyPassOP = true;
+            alreadyAlertOP = false;
+        }
 
 
     }
