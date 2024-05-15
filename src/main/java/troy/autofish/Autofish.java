@@ -23,6 +23,7 @@ import troy.autofish.monitor.FishMonitorMPMotion;
 import troy.autofish.monitor.FishMonitorMPSound;
 import troy.autofish.scheduler.ActionType;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -134,7 +135,9 @@ public class Autofish {
 
     public void catchFish() {
         if(!modAutofish.getScheduler().isRecastQueued()) { //prevents double reels
-            detectOpenWater(client.player.fishHook);
+            if (client.player != null) {
+                detectOpenWater(client.player.fishHook);
+            }
             //queue actions
             queueRodSwitch();
             queueRecast();
@@ -189,7 +192,7 @@ public class Autofish {
             )))){
                 // didn't pass the check
                 if(!alreadyAlertOP){
-                    bobber.getPlayerOwner().sendMessage(Text.translatable("info.autofish.open_water_detection.fail"),true);
+                    Objects.requireNonNull(bobber.getPlayerOwner()).sendMessage(Text.translatable("info.autofish.open_water_detection.fail"),true);
                     alreadyAlertOP = true;
                     alreadyPassOP = false;
                 }
@@ -197,7 +200,7 @@ public class Autofish {
             }
         }
         if(flag && !alreadyPassOP) {
-            bobber.getPlayerOwner().sendMessage(Text.translatable("info.autofish.open_water_detection.success"),true);
+            Objects.requireNonNull(bobber.getPlayerOwner()).sendMessage(Text.translatable("info.autofish.open_water_detection.success"),true);
             alreadyPassOP = true;
             alreadyAlertOP = false;
         }
@@ -241,8 +244,11 @@ public class Autofish {
     public void useRod() {
         if(client.player != null && client.world != null) {
             Hand hand = getCorrectHand();
-            ActionResult actionResult = client.interactionManager.interactItem(client.player, hand);
-            if (actionResult.isAccepted()) {
+            ActionResult actionResult = null;
+            if (client.interactionManager != null) {
+                actionResult = client.interactionManager.interactItem(client.player, hand);
+            }
+            if (actionResult != null && actionResult.isAccepted()) {
                 if (actionResult.shouldSwingHand()) {
                     client.player.swingHand(hand);
                 }
@@ -257,12 +263,15 @@ public class Autofish {
 
     private Hand getCorrectHand() {
         if (!modAutofish.getConfig().isMultiRod()) {
-            if (isItemFishingRod(client.player.getOffHandStack().getItem())) return Hand.OFF_HAND;
+            if (client.player != null && isItemFishingRod(client.player.getOffHandStack().getItem()))
+                return Hand.OFF_HAND;
         }
         return Hand.MAIN_HAND;
     }
 
     private ItemStack getHeldItem() {
+        if (client.player == null) return ItemStack.EMPTY;
+
         if (!modAutofish.getConfig().isMultiRod()) {
             if (isItemFishingRod(client.player.getOffHandStack().getItem()))
                 return client.player.getOffHandStack();
