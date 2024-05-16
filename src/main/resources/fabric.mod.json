@@ -27,6 +27,7 @@
   ],
 
   "depends": {
-    "fabric": "*"
+    "fabric": "*",
+    "cloth-config": "*"
   }
 }
