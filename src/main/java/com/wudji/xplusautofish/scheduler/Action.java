@@ -1,9 +1,8 @@
-package troy.autofish.scheduler;
+package com.wudji.xplusautofish.scheduler;
 
-import net.minecraft.util.Util;
+import net.minecraft.Util;
 
 public class Action {
-
     private ActionType actionType;
     private long delay;
     private long timeToComplete;
@@ -12,7 +11,7 @@ public class Action {
     public Action(ActionType actionType, long delay, Runnable runnable) {
         this.actionType = actionType;
         this.delay = delay;
-        this.timeToComplete = Util.getMeasuringTimeMs() + delay;
+        this.timeToComplete = Util.getMillis() + delay;
         this.runnable = runnable;
 
 //        System.out.println("regd " + actionType + ". Complete in " + delay + " at " + timeToComplete);
@@ -23,13 +22,13 @@ public class Action {
      */
     public boolean tick(){
 
-        if(Util.getMeasuringTimeMs() >= timeToComplete){
+        if(Util.getMillis() >= timeToComplete){
 
             runnable.run();
 
             //If this is a repeating action, we need to reset the timer
             if(actionType == ActionType.REPEATING_ACTION){
-                this.timeToComplete = Util.getMeasuringTimeMs() + delay;
+                this.timeToComplete = Util.getMillis() + delay;
             }
 
             return true;
@@ -42,6 +41,6 @@ public class Action {
     }
 
     public void resetTimer(){
-        this.timeToComplete = Util.getMeasuringTimeMs() + delay;
+        this.timeToComplete = Util.getMillis() + delay;
     }
 }

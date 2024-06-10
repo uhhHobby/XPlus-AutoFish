@@ -1,10 +1,10 @@
-package troy.autofish.config;
+package com.wudji.xplusautofish.config;
 
 import com.google.gson.annotations.Expose;
 
 public class Config {
-
-    @Expose boolean isAutofishEnabled = true;
+    @Expose
+    boolean isAutofishEnabled = true;
     @Expose boolean multiRod = false;
     @Expose boolean isOpenWaterDetectEnabled = true;
     @Expose boolean noBreak = false;

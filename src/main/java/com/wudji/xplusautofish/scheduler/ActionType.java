@@ -1,4 +1,4 @@
-package troy.autofish.scheduler;
+package com.wudji.xplusautofish.scheduler;
 
 public enum ActionType {
     RECAST,

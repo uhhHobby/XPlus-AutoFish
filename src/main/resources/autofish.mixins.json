@@ -1,9 +1,11 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "troy.autofish.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "mixins": [],
+  "package": "com.wudji.xplusautofish.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "xplus-autofish.refmap.json",
+  "mixins": [
+  ],
   "client": [
     "MixinFishHookEntity",
     "MixinClientPlayNetworkHandler"

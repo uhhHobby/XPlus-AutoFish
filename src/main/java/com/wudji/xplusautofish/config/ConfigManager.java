@@ -1,10 +1,10 @@
-package troy.autofish.config;
+package com.wudji.xplusautofish.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.fabricmc.loader.api.FabricLoader;
+import com.wudji.xplusautofish.ForgeModXPlusAutofish;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.FileUtils;
-import troy.autofish.FabricModAutofish;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -12,19 +12,18 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class ConfigManager {
-
     private Config config;
 
-    private FabricModAutofish modAutofish;
+    private ForgeModXPlusAutofish modAutofish;
     private Gson gson;
     private File configFile;
 
     private Executor executor = Executors.newSingleThreadExecutor();
 
-    public ConfigManager(FabricModAutofish modAutofish) {
+    public ConfigManager(ForgeModXPlusAutofish modAutofish) {
         this.modAutofish = modAutofish;
         this.gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
-        this.configFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), "autofish.config");
+        this.configFile = new File(FMLPaths.CONFIGDIR.get().toFile(), "autofish.config");
         //run synchronously on first run so our options are available for the Autofish instance
         readConfig(false);
     }
