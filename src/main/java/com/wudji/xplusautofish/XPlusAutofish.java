@@ -8,6 +8,7 @@ import com.wudji.xplusautofish.scheduler.ActionType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.Util;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundChatPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -15,11 +16,15 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.FishingRodItem;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Blocks;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +35,8 @@ public class XPlusAutofish {
 
     private boolean hookExists = false;
     private long hookRemovedAt = 0L;
+    private boolean alreadyAlertOP = false;
+    private boolean alreadyPassOP = false;
 
     public long timeMillis = 0L;
 
@@ -126,6 +133,9 @@ public class XPlusAutofish {
 
     public void catchFish() {
         if(!modAutofish.getScheduler().isRecastQueued()) { //prevents double reels
+            if (client.player != null) {
+                detectOpenWater(client.player.fishing);
+            }
             //queue actions
             queueRodSwitch();
             queueRecast();
@@ -136,18 +146,18 @@ public class XPlusAutofish {
     }
 
     public void queueRecast() {
-        modAutofish.getScheduler().scheduleAction(ActionType.RECAST, modAutofish.getConfig().getRecastDelay(), () -> {
+        modAutofish.getScheduler().scheduleAction(ActionType.RECAST, getRandomDelay(), () -> {
             //State checks to ensure we can still fish once this runs
             if(hookExists) return;
             if(!isHoldingFishingRod()) return;
-            if(modAutofish.getConfig().isNoBreak() && getHeldItem().getDamageValue() >= 63) return;
+            if(modAutofish.getConfig().isNoBreak() && Objects.requireNonNull(getHeldItem()).getDamageValue() >= 63) return;
 
             useRod();
         });
     }
 
     private void queueRodSwitch(){
-        modAutofish.getScheduler().scheduleAction(ActionType.ROD_SWITCH, modAutofish.getConfig().getRecastDelay() - 500, () -> {
+        modAutofish.getScheduler().scheduleAction(ActionType.ROD_SWITCH, (long) (getRandomDelay() * 0.83), () -> {
             if(!modAutofish.getConfig().isMultiRod()) return;
 
             switchToFirstRod(client.player);
@@ -204,7 +214,7 @@ public class XPlusAutofish {
     }
 
     public boolean isHoldingFishingRod() {
-        return isItemFishingRod(getHeldItem().getItem());
+        return isItemFishingRod(Objects.requireNonNull(getHeldItem()).getItem());
     }
 
     private InteractionHand getCorrectHand() {
@@ -213,6 +223,48 @@ public class XPlusAutofish {
                 return InteractionHand.OFF_HAND;
         }
         return InteractionHand.MAIN_HAND;
+    }
+
+    private void detectOpenWater(FishingHook bobber){
+        /*
+         * To catch items in the treasure category, the bobber must be in open water,
+         * defined as the 5×4×5 vicinity around the bobber resting on the water surface
+         * (2 blocks away horizontally, 2 blocks above the water surface, and 2 blocks deep).
+         * Each horizontal layer in this area must consist only of air and lily pads or water source blocks,
+         * waterlogged blocks without collision (such as signs, kelp, or coral fans), and bubble columns.
+         * (from Minecraft wiki)
+         * */
+        if(!modAutofish.getConfig().isOpenWaterDetectEnabled()) return;
+
+        int x = bobber.getBlockX();
+        int y = bobber.getBlockY();
+        int z = bobber.getBlockZ();
+        boolean flag = true;
+        for(int yi = -2; yi <= 2; yi++){
+            if(!(BlockPos.betweenClosedStream(x - 2, y + yi, z - 2, x + 2, y + yi, z + 2).allMatch((blockPos ->
+                    // every block is water
+                    bobber.getCommandSenderWorld().getBlockState(blockPos).getBlock() == Blocks.WATER
+            )) || BlockPos.betweenClosedStream(x - 2, y + yi, z - 2, x + 2, y + yi, z + 2).allMatch((blockPos ->
+                    // or every block is air or lily pad
+                    bobber.getCommandSenderWorld().getBlockState(blockPos).getBlock() == Blocks.AIR
+                            || bobber.getCommandSenderWorld().getBlockState(blockPos).getBlock() == Blocks.LILY_PAD
+            )))){
+                // didn't pass the check
+                if(!alreadyAlertOP){
+                    Objects.requireNonNull(bobber.getPlayerOwner()).displayClientMessage(new TranslatableComponent("info.autofish.open_water_detection.fail"),true);
+                    alreadyAlertOP = true;
+                    alreadyPassOP = false;
+                }
+                flag = false;
+            }
+        }
+        if(flag && !alreadyPassOP) {
+            Objects.requireNonNull(bobber.getPlayerOwner()).displayClientMessage(new TranslatableComponent("info.autofish.open_water_detection.success"),true);
+            alreadyPassOP = true;
+            alreadyAlertOP = false;
+        }
+
+
     }
 
     private ItemStack getHeldItem() {
@@ -241,6 +293,13 @@ public class XPlusAutofish {
     private boolean shouldUseMPDetection(){
         if(modAutofish.getConfig().isForceMPDetection()) return true;
         return !client.isLocalServer();
+    }
+
+    private long getRandomDelay(){
+        return Math.random() >=0.5 ?
+                (long) (modAutofish.getConfig().getRecastDelay() * (1 - (Math.random() * modAutofish.getConfig().getRandomDelay() * 0.01))) :
+                (long) (modAutofish.getConfig().getRecastDelay() * (1 + (Math.random() * modAutofish.getConfig().getRandomDelay() * 0.01)));
+
     }
     
 }
