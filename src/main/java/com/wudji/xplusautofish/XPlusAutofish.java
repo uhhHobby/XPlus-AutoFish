@@ -8,8 +8,8 @@ import com.wudji.xplusautofish.scheduler.ActionType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.Util;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.network.protocol.game.ClientboundChatPacket;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -83,15 +83,18 @@ public class XPlusAutofish {
      * for singleplayer detection only
      */
     public void tickFishingLogic(Entity owner, int ticksCatchable) {
-        if (modAutofish.getConfig().isAutofishEnabled() && !shouldUseMPDetection()) {
-            //null checks for sanity
-            if (client.player != null && client.player.fishing != null) {
-                //hook is catchable and player is correct
-                if (ticksCatchable > 0 && owner.getUUID().compareTo(client.player.getUUID()) == 0) {
-                    catchFish();
+        client.execute(() ->{
+            if (modAutofish.getConfig().isAutofishEnabled() && !shouldUseMPDetection()) {
+                //null checks for sanity
+                if (client.player != null && client.player.fishing != null) {
+                    //hook is catchable and player is correct
+                    if (ticksCatchable > 0 && owner.getUUID().compareTo(client.player.getUUID()) == 0) {
+                        catchFish();
+                    }
                 }
             }
-        }
+        });
+
     }
 
     /**
@@ -110,7 +113,7 @@ public class XPlusAutofish {
      * Callback from mixin when chat packets are received
      * For multiplayer detection only
      */
-    public void handleChat(ClientboundChatPacket packet) {
+    public void handleChat(ClientboundSystemChatPacket packet) {
         if (modAutofish.getConfig().isAutofishEnabled()) {
             if (!client.isLocalServer()) {
                 if (isHoldingFishingRod()) {
@@ -121,7 +124,7 @@ public class XPlusAutofish {
                         if (org.apache.commons.lang3.StringUtils.deleteWhitespace(modAutofish.getConfig().getClearLagRegex()).isEmpty())
                             return;
                         //check if it matches
-                        Matcher matcher = Pattern.compile(modAutofish.getConfig().getClearLagRegex(), Pattern.CASE_INSENSITIVE).matcher(StringUtil.stripColor(packet.getMessage().getString()));
+                        Matcher matcher = Pattern.compile(modAutofish.getConfig().getClearLagRegex(), Pattern.CASE_INSENSITIVE).matcher(StringUtil.stripColor(packet.content().getString()));
                         if (matcher.find()) {
                             queueRecast();
                         }
@@ -202,7 +205,7 @@ public class XPlusAutofish {
             InteractionHand hand = getCorrectHand();
             InteractionResult actionResult = null;
             if (client.gameMode != null) {
-                actionResult = client.gameMode.useItem(client.player, client.level, hand);
+                actionResult = client.gameMode.useItem(client.player, hand);
             }
             if (actionResult != null && actionResult.consumesAction()) {
                 if (actionResult.shouldSwing()) {
@@ -251,7 +254,7 @@ public class XPlusAutofish {
             )))){
                 // didn't pass the check
                 if(!alreadyAlertOP){
-                    Objects.requireNonNull(bobber.getPlayerOwner()).displayClientMessage(new TranslatableComponent("info.autofish.open_water_detection.fail"),true);
+                    Objects.requireNonNull(bobber.getPlayerOwner()).displayClientMessage(Component.translatable("info.autofish.open_water_detection.fail"),true);
                     alreadyAlertOP = true;
                     alreadyPassOP = false;
                 }
@@ -259,7 +262,7 @@ public class XPlusAutofish {
             }
         }
         if(flag && !alreadyPassOP) {
-            Objects.requireNonNull(bobber.getPlayerOwner()).displayClientMessage(new TranslatableComponent("info.autofish.open_water_detection.success"),true);
+            Objects.requireNonNull(bobber.getPlayerOwner()).displayClientMessage(Component.translatable("info.autofish.open_water_detection.success"),true);
             alreadyPassOP = true;
             alreadyAlertOP = false;
         }

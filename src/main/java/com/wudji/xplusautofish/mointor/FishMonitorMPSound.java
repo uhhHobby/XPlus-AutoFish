@@ -3,9 +3,9 @@ package com.wudji.xplusautofish.mointor;
 import com.wudji.xplusautofish.XPlusAutofish;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundCustomSoundPacket;
 import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.projectile.FishingHook;
 
 public class FishMonitorMPSound implements FishMonitorMP{
@@ -22,7 +22,7 @@ public class FishMonitorMPSound implements FishMonitorMP{
     @Override
     public void handlePacket(XPlusAutofish autofish, Packet<?> packet, Minecraft minecraft) {
 
-        if (packet instanceof ClientboundSoundPacket || packet instanceof ClientboundCustomSoundPacket ||packet instanceof ClientboundSoundEntityPacket) {
+        if (packet instanceof ClientboundSoundPacket ||packet instanceof ClientboundSoundEntityPacket) {
             //TODO investigate PlaySoundFromEntityS2CPacket; i dont think its ever used for fishing but whatever
 
             String soundName;
@@ -30,13 +30,8 @@ public class FishMonitorMPSound implements FishMonitorMP{
 
             if (packet instanceof ClientboundSoundPacket) {
                 ClientboundSoundPacket soundPacket = (ClientboundSoundPacket) packet;
-                soundName = soundPacket.getSound().getLocation().toString();
-                x = soundPacket.getX();
-                y = soundPacket.getY();
-                z = soundPacket.getZ();
-            } else if (packet instanceof ClientboundCustomSoundPacket) {
-                ClientboundCustomSoundPacket soundPacket = (ClientboundCustomSoundPacket) packet;
-                soundName = soundPacket.getName().toString();
+                SoundEvent soundEvent = soundPacket.getSound().value();
+                soundName = soundEvent.getLocation().toString();
                 x = soundPacket.getX();
                 y = soundPacket.getY();
                 z = soundPacket.getZ();

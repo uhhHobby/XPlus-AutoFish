@@ -8,9 +8,10 @@ import com.wudji.xplusautofish.scheduler.AutofishScheduler;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundChatPacket;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -49,13 +50,17 @@ public class ForgeModXPlusAutofish {
         this.configManager = new ConfigManager(this);
         //Register Keybinding
         autofishGuiKey = new KeyMapping("key.autofish.open_gui", GLFW.GLFW_KEY_V, "Autofish");
-        ClientRegistry.registerKeyBinding(autofishGuiKey);
         //Create Scheduler instance
         this.scheduler = new AutofishScheduler(this);
         //Create Autofisher instance
         this.autofish = new XPlusAutofish(this);
     }
     // You can use SubscribeEvent and let the Event Bus discover methods to call
+    @SubscribeEvent
+    public void registerBindings(RegisterKeyMappingsEvent event) {
+        event.register(autofishGuiKey);
+    }
+
     @SubscribeEvent
     public void tick(TickEvent.ClientTickEvent event) {
         Minecraft client = Minecraft.getInstance();
@@ -76,7 +81,7 @@ public class ForgeModXPlusAutofish {
     /**
      * Mixin callback for chat packets
      */
-    public void handleChat(ClientboundChatPacket packet) {
+    public void handleChat(ClientboundSystemChatPacket packet) {
         autofish.handleChat(packet);
     }
 

@@ -4,7 +4,6 @@ buildscript {
         maven {
             url = 'https://repo.spongepowered.org/repository/maven-public/'
         }
-        maven { url = 'https://maven.minecraftforge.net/' }
         mavenCentral()
     }
     dependencies {
@@ -25,7 +24,7 @@ group = mod_group_id
 version = mod_version + "-mc" + minecraft_version
 
 base {
-    archivesName = mod_id
+    archivesName = "xplus-" + mod_id
 }
 
 java {
@@ -144,7 +143,6 @@ repositories {
     //     dir 'libs'
     // }
     maven { url "https://maven.shedaniel.me/" }
-    maven { url = 'https://maven.minecraftforge.net/' }
 }
 
 dependencies {
