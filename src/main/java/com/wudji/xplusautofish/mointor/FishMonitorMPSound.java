@@ -2,10 +2,12 @@ package com.wudji.xplusautofish.mointor;
 
 import com.wudji.xplusautofish.XPlusAutofish;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundCustomSoundPacket;
 import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.projectile.FishingHook;
 
 public class FishMonitorMPSound implements FishMonitorMP{
@@ -28,14 +30,13 @@ public class FishMonitorMPSound implements FishMonitorMP{
             String soundName;
             double x, y, z;
 
-            if (packet instanceof ClientboundSoundPacket) {
-                ClientboundSoundPacket soundPacket = (ClientboundSoundPacket) packet;
-                soundName = soundPacket.getSound().getLocation().toString();
+            if (packet instanceof ClientboundSoundPacket soundPacket) {
+                SoundEvent soundEvent = soundPacket.getSound();
+                soundName = soundEvent.getLocation().toString();
                 x = soundPacket.getX();
                 y = soundPacket.getY();
                 z = soundPacket.getZ();
-            } else if (packet instanceof ClientboundCustomSoundPacket) {
-                ClientboundCustomSoundPacket soundPacket = (ClientboundCustomSoundPacket) packet;
+            } else if (packet instanceof ClientboundCustomSoundPacket soundPacket) {
                 soundName = soundPacket.getName().toString();
                 x = soundPacket.getX();
                 y = soundPacket.getY();

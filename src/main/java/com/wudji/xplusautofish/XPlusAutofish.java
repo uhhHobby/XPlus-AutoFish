@@ -198,19 +198,21 @@ public class XPlusAutofish {
     }
 
     public void useRod() {
-        if(client.player != null && client.level != null) {
-            InteractionHand hand = getCorrectHand();
-            InteractionResult actionResult = null;
-            if (client.gameMode != null) {
-                actionResult = client.gameMode.useItem(client.player, client.level, hand);
-            }
-            if (actionResult != null && actionResult.consumesAction()) {
-                if (actionResult.shouldSwing()) {
-                    client.player.swing(hand);
+        client.execute(() -> {
+            if(client.player != null && client.level != null) {
+                InteractionHand hand = getCorrectHand();
+                InteractionResult actionResult = null;
+                if (client.gameMode != null) {
+                    actionResult = client.gameMode.useItem(client.player, client.level, hand);
                 }
-                client.gameRenderer.itemInHandRenderer.itemUsed(hand);
+                if (actionResult != null && actionResult.consumesAction()) {
+                    if (actionResult.shouldSwing()) {
+                        client.player.swing(hand);
+                    }
+                    client.gameRenderer.itemInHandRenderer.itemUsed(hand);
+                }
             }
-        }
+        });
     }
 
     public boolean isHoldingFishingRod() {
