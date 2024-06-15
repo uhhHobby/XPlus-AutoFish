@@ -18,8 +18,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.StringHelper;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import troy.autofish.monitor.FishMonitorMP;
 import troy.autofish.monitor.FishMonitorMPMotion;
 import troy.autofish.monitor.FishMonitorMPSound;
