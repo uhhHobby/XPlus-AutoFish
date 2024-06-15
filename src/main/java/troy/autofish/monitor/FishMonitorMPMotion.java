@@ -16,7 +16,7 @@ import troy.autofish.Autofish;
 public class FishMonitorMPMotion implements FishMonitorMP {
 
     // The threshold of detecting a bobber moving downwards, to detect as a fish.
-    public static final int PACKET_MOTION_Y_THRESHOLD = -350;
+    public static final double PACKET_MOTION_Y_THRESHOLD = -0.1;
 
     // Start catching fish after a 1 second threshold of hitting water.
     public static final int START_CATCHING_AFTER_THRESHOLD = 1000;
@@ -33,6 +33,7 @@ public class FishMonitorMPMotion implements FishMonitorMP {
     public void hookTick(Autofish autofish, MinecraftClient minecraft, FishingBobberEntity hook) {
         if (worldContainsBlockWithMaterial(hook.getWorld(), hook.getBoundingBox(), Blocks.WATER)) {
             hasHitWater = true;
+
         }
     }
 
@@ -44,10 +45,8 @@ public class FishMonitorMPMotion implements FishMonitorMP {
 
     @Override
     public void handlePacket(Autofish autofish, Packet<?> packet, MinecraftClient minecraft) {
-        if (packet instanceof EntityVelocityUpdateS2CPacket) {
-            EntityVelocityUpdateS2CPacket velocityPacket = (EntityVelocityUpdateS2CPacket) packet;
+        if (packet instanceof EntityVelocityUpdateS2CPacket velocityPacket) {
             if (minecraft.player != null && minecraft.player.fishHook != null && minecraft.player.fishHook.getId() == velocityPacket.getId()) {
-
                 // Wait until the bobber has rose in the water.
                 // Prevent remarking the bobber rise timestamp until it is reset by catching.
                 if (hasHitWater && bobberRiseTimestamp == 0 && velocityPacket.getVelocityY() > 0) {
@@ -60,7 +59,8 @@ public class FishMonitorMPMotion implements FishMonitorMP {
 
                 // If the bobber has been in the water long enough, start detecting the bobber movement.
                 if (hasHitWater && bobberRiseTimestamp != 0 && timeInWater > START_CATCHING_AFTER_THRESHOLD) {
-                    if (velocityPacket.getVelocityX() == 0 && velocityPacket.getVelocityZ() == 0 && velocityPacket.getVelocityY() < PACKET_MOTION_Y_THRESHOLD) {
+                    // minecraft.player.sendMessage(Text.of("Y: "+ velocityPacket.getVelocityY()),true);
+                    if (velocityPacket.getVelocityX() == 0.0 && velocityPacket.getVelocityZ() == 0.0 && velocityPacket.getVelocityY() < PACKET_MOTION_Y_THRESHOLD) {
                         // Catch the fish
                         autofish.catchFish();
 
