@@ -29,7 +29,7 @@
   "options.autofish.persistent.tooltip_3": "并在需要时重新投掷",
   "options.autofish.persistent.tooltip_4": "这对于滞后问题或",
   "options.autofish.persistent.tooltip_5": "长时间钓鱼非常有用",
-  
+
   "options.autofish.sound.title": "使用声音检测",
   "options.autofish.sound.tooltip_0": "\u00A76基于浮标声音的更新",
   "options.autofish.sound.tooltip_1": "\u00A76他将更准确的检测收杆时机",
@@ -68,6 +68,11 @@
   "options.autofish.advanced.title": "高级选项",
 
   "info.autofish.open_water_detection.fail": "§c[自动钓鱼] 您当前钓鱼的区域不是开放水域，无法获得宝藏!§0",
-  "info.autofish.open_water_detection.success": "§2[自动钓鱼] 您当前钓鱼的区域是开放水域!§0"
+  "info.autofish.open_water_detection.success": "§2[自动钓鱼] 您当前钓鱼的区域是开放水域!§0",
+
+  "options.autofish.reel_in_delay.title": "收杆延迟",
+  "options.autofish.reel_in_delay.value": "%d 毫秒",
+  "options.autofish.reel_in_delay.tooltip_0": "当鱼咬钩时，延迟一段时间收杆.",
+  "options.autofish.reel_in_delay.tooltip_1": "将此项设置为1以禁用此功能."
 
 }
