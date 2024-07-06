@@ -135,21 +135,20 @@ public class Autofish {
     }
 
     public void catchFish() {
-        if(!modAutofish.getScheduler().isRecastQueued()) { //prevents double reels
-            if (client.player != null) {
-                detectOpenWater(client.player.fishHook);
+            if(!modAutofish.getScheduler().isRecastQueued()) { //prevents double reels
+                if (client.player != null) {
+                    detectOpenWater(client.player.fishHook);
+                }
+                //queue actions
+                queueRodSwitch();
+                queueRecast();
+                modAutofish.getScheduler().scheduleAction(ActionType.REEL_IN, modAutofish.getConfig().getReelInDelay(), this::useRod);
             }
-            //queue actions
-            queueRodSwitch();
-            queueRecast();
-
-            //reel in
-            useRod();
-        }
     }
 
     public void queueRecast() {
-        modAutofish.getScheduler().scheduleAction(ActionType.RECAST, getRandomDelay(), () -> {
+        modAutofish.getScheduler().scheduleAction(ActionType.RECAST, getRandomDelay()
+                + modAutofish.getConfig().getReelInDelay(), () -> {
             //State checks to ensure we can still fish once this runs
             if(hookExists) return;
             if(!isHoldingFishingRod()) return;
@@ -160,7 +159,8 @@ public class Autofish {
     }
 
     private void queueRodSwitch(){
-        modAutofish.getScheduler().scheduleAction(ActionType.ROD_SWITCH, (long) (getRandomDelay() * 0.83), () -> {
+        modAutofish.getScheduler().scheduleAction(ActionType.ROD_SWITCH, (long) (getRandomDelay() * 0.83)
+                + modAutofish.getConfig().getReelInDelay(), () -> {
             if(!modAutofish.getConfig().isMultiRod()) return;
 
             switchToFirstRod(client.player);

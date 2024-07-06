@@ -155,7 +155,7 @@ public class AutofishScreenBuilder {
                 })
                 .build();
         AbstractConfigListEntry randomDelaySlider = entryBuilder.startLongSlider(Text.translatable("options.autofish.random_delay.title"), config.getRandomDelay(), 0, 75)
-                .setDefaultValue(defaults.getRecastDelay())
+                .setDefaultValue(defaults.getRandomPercent())
                 .setTooltip(
                         Text.translatable("options.autofish.random_delay.tooltip_0"),
                         Text.translatable("options.autofish.random_delay.tooltip_1"),
@@ -165,6 +165,17 @@ public class AutofishScreenBuilder {
                 .setTextGetter(value -> Text.translatable("options.autofish.random_delay.value", value))
                 .setSaveConsumer(newValue -> {
                     modAutofish.getConfig().setRandomDelay(newValue);
+                })
+                .build();
+        AbstractConfigListEntry reelInDelay = entryBuilder.startLongSlider(Text.translatable("options.autofish.reel_in_delay.title"), config.getReelInDelay(), 1, 2000)
+                .setDefaultValue(defaults.getReelInDelay())
+                .setTooltip(
+                        Text.translatable("options.autofish.reel_in_delay.tooltip_0"),
+                        Text.translatable("options.autofish.reel_in_delay.tooltip_1")
+                )
+                .setTextGetter(value -> Text.translatable("options.autofish.reel_in_delay.value", value))
+                .setSaveConsumer(newValue -> {
+                    modAutofish.getConfig().setReelInDelay(newValue);
                 })
                 .build();
 
@@ -195,6 +206,7 @@ public class AutofishScreenBuilder {
         subCatBuilderAdvanced.add(toggleForceMPDetection);
         subCatBuilderAdvanced.add(recastDelaySlider);
         subCatBuilderAdvanced.add(randomDelaySlider);
+        subCatBuilderAdvanced.add(reelInDelay);
         subCatBuilderAdvanced.add(clearLagRegexField);
         subCatBuilderAdvanced.setExpanded(true);
 
