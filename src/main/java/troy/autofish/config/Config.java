@@ -13,6 +13,7 @@ public class Config {
     @Expose boolean forceMPDetection = false;
     @Expose long recastDelay = 1500;
     @Expose long randomPercent = 50;
+    @Expose long reelInDelay = 1;
     @Expose String clearLagRegex = "\\[ClearLag\\] Removed [0-9]+ Entities!";
 
     public boolean isAutofishEnabled() {
@@ -81,6 +82,22 @@ public class Config {
 
     public void setOpenWaterDetectEnabled(boolean openWaterDetectEnabled) {
         isOpenWaterDetectEnabled = openWaterDetectEnabled;
+    }
+
+    public long getRandomPercent() {
+        return randomPercent;
+    }
+
+    public void setRandomPercent(long randomPercent) {
+        this.randomPercent = randomPercent;
+    }
+
+    public long getReelInDelay() {
+        return reelInDelay;
+    }
+
+    public void setReelInDelay(long reelInDelay) {
+        this.reelInDelay = reelInDelay;
     }
 
     /**
