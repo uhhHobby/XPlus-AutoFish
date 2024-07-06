@@ -30,7 +30,7 @@
   "options.autofish.persistent.tooltip_3": "if needed.",
   "options.autofish.persistent.tooltip_4": "This is useful for lag issues or when",
   "options.autofish.persistent.tooltip_5": "fishing for long periods of time.",
-  
+
   "options.autofish.sound.title": "Use Sound Detection",
   "options.autofish.sound.tooltip_0": "\u00A76Newer, more accurate detection based",
   "options.autofish.sound.tooltip_1": "\u00A76on bobber sounds rather than the",
@@ -59,6 +59,11 @@
   "options.autofish.random_delay.tooltip_1": "For example: Set this to 20% will make",
   "options.autofish.random_delay.tooltip_2": "a 1500ms delay fall in 1200-1800ms (1500ms ±20%).",
   "options.autofish.random_delay.tooltip_3": "Set this to 0 to disable this function.",
+
+  "options.autofish.reel_in_delay.title": "Reel in delay",
+  "options.autofish.reel_in_delay.value": "%d milliseconds",
+  "options.autofish.reel_in_delay.tooltip_0": "Add a delay for the reel-in when a fish bites the float.",
+  "options.autofish.reel_in_delay.tooltip_1": "Set this option to 1 to disable this function.",
 
   "options.autofish.clear_regex.title": "ClearLag Chat Pattern",
   "options.autofish.clear_regex.tooltip_0": "Recast the fishing rod when",
