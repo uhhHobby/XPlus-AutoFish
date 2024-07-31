@@ -68,6 +68,11 @@
   "options.autofish.advanced.title": "高级选项",
 
   "info.autofish.open_water_detection.fail": "§c[自动钓鱼] 您当前钓鱼的区域不是开放水域，无法获得宝藏!§0",
-  "info.autofish.open_water_detection.success": "§2[自动钓鱼] 您当前钓鱼的区域是开放水域!§0"
+  "info.autofish.open_water_detection.success": "§2[自动钓鱼] 您当前钓鱼的区域是开放水域!§0",
+
+  "options.autofish.reel_in_delay.title": "收杆延迟",
+  "options.autofish.reel_in_delay.value": "%d 毫秒",
+  "options.autofish.reel_in_delay.tooltip_0": "当鱼咬钩时，延迟一段时间收杆.",
+  "options.autofish.reel_in_delay.tooltip_1": "将此项设置为1以禁用此功能."
 
 }

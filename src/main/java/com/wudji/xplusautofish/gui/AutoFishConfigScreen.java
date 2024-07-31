@@ -154,7 +154,7 @@ public class AutoFishConfigScreen {
                 })
                 .build();
         AbstractConfigListEntry randomDelaySlider = entryBuilder.startLongSlider(Component.translatable("options.autofish.random_delay.title"), config.getRandomDelay(), 0, 75)
-                .setDefaultValue(defaults.getRecastDelay())
+                .setDefaultValue(defaults.getRandomDelay())
                 .setTooltip(
                         Component.translatable("options.autofish.random_delay.tooltip_0"),
                         Component.translatable("options.autofish.random_delay.tooltip_1"),
@@ -164,6 +164,18 @@ public class AutoFishConfigScreen {
                 .setTextGetter(value -> Component.translatable("options.autofish.random_delay.value", value))
                 .setSaveConsumer(newValue -> {
                     modAutofish.getConfig().setRandomDelay(newValue);
+                })
+                .build();
+
+        AbstractConfigListEntry reelInDelay = entryBuilder.startLongSlider(Component.translatable("options.autofish.reel_in_delay.title"), config.getReelInDelay(), 1, 2000)
+                .setDefaultValue(defaults.getReelInDelay())
+                .setTooltip(
+                        Component.translatable("options.autofish.reel_in_delay.tooltip_0"),
+                        Component.translatable("options.autofish.reel_in_delay.tooltip_1")
+                )
+                .setTextGetter(value -> Component.translatable("options.autofish.reel_in_delay.value", value))
+                .setSaveConsumer(newValue -> {
+                    modAutofish.getConfig().setReelInDelay(newValue);
                 })
                 .build();
 
@@ -194,6 +206,7 @@ public class AutoFishConfigScreen {
         subCatBuilderAdvanced.add(toggleForceMPDetection);
         subCatBuilderAdvanced.add(recastDelaySlider);
         subCatBuilderAdvanced.add(randomDelaySlider);
+        subCatBuilderAdvanced.add(reelInDelay);
         subCatBuilderAdvanced.add(clearLagRegexField);
         subCatBuilderAdvanced.setExpanded(true);
 
