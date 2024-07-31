@@ -136,9 +136,8 @@ public class XPlusAutofish {
 
     public void catchFish() {
         if(!modAutofish.getScheduler().isRecastQueued()) { //prevents double reels
-            if (client.player != null) {
-                detectOpenWater(client.player.fishing);
-            }
+            detectOpenWater();
+
             //queue actions
             queueRodSwitch();
             queueRecast();
@@ -228,7 +227,7 @@ public class XPlusAutofish {
         return InteractionHand.MAIN_HAND;
     }
 
-    private void detectOpenWater(FishingHook bobber){
+    private void detectOpenWater(){
         /*
          * To catch items in the treasure category, the bobber must be in open water,
          * defined as the 5×4×5 vicinity around the bobber resting on the water surface
@@ -237,7 +236,10 @@ public class XPlusAutofish {
          * waterlogged blocks without collision (such as signs, kelp, or coral fans), and bubble columns.
          * (from Minecraft wiki)
          * */
-        if(!modAutofish.getConfig().isOpenWaterDetectEnabled()) return;
+        if (client.player == null || client.player.fishing == null) return;
+        if (!modAutofish.getConfig().isOpenWaterDetectEnabled()) return;
+
+        FishingHook bobber = client.player.fishing;
 
         int x = bobber.getBlockX();
         int y = bobber.getBlockY();
