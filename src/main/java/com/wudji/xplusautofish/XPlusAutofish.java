@@ -143,12 +143,15 @@ public class XPlusAutofish {
             queueRecast();
 
             //reel in
-            useRod();
+            modAutofish.getScheduler().scheduleAction(ActionType.REEL_IN,
+                    modAutofish.getConfig().getReelInDelay(),
+                    this::useRod);
         }
     }
 
     public void queueRecast() {
-        modAutofish.getScheduler().scheduleAction(ActionType.RECAST, getRandomDelay(), () -> {
+        modAutofish.getScheduler().scheduleAction(ActionType.RECAST,
+                getRandomDelay() + modAutofish.getConfig().getReelInDelay(), () -> {
             //State checks to ensure we can still fish once this runs
             if(hookExists) return;
             if(!isHoldingFishingRod()) return;
@@ -159,7 +162,8 @@ public class XPlusAutofish {
     }
 
     private void queueRodSwitch(){
-        modAutofish.getScheduler().scheduleAction(ActionType.ROD_SWITCH, (long) (getRandomDelay() * 0.83), () -> {
+        modAutofish.getScheduler().scheduleAction(ActionType.ROD_SWITCH,
+                (long) (getRandomDelay() * 0.83) + modAutofish.getConfig().getReelInDelay(), () -> {
             if(!modAutofish.getConfig().isMultiRod()) return;
 
             switchToFirstRod(client.player);
