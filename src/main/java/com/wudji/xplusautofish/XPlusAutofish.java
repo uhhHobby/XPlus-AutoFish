@@ -49,7 +49,7 @@ public class XPlusAutofish {
         modAutofish.getScheduler().scheduleRepeatingAction(10000, () -> {
             if(!modAutofish.getConfig().isPersistentMode()) return;
             if(!isHoldingFishingRod()) return;
-            if(hookExists) return;
+            if(hookExists && isBobberInWater()) return;
             if(modAutofish.getScheduler().isRecastQueued()) return;
 
             useRod();
@@ -200,6 +200,17 @@ public class XPlusAutofish {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Check if the hook is on the ground
+     */
+    public boolean isBobberInWater(){
+        if(client.player != null && client.level != null && client.player.fishing != null) {
+            return client.player.fishing.isInWater();
+        } else{
+            return false;
         }
     }
 
