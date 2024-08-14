@@ -48,7 +48,7 @@ public class Autofish {
         modAutofish.getScheduler().scheduleRepeatingAction(10000, () -> {
             if(!modAutofish.getConfig().isPersistentMode()) return;
             if(!isHoldingFishingRod()) return;
-            if(hookExists) return;
+            if(hookExists && isBobberInWater()) return;
             if(modAutofish.getScheduler().isRecastQueued()) return;
 
             useRod();
@@ -238,6 +238,14 @@ public class Autofish {
                     }
                 }
             }
+        }
+    }
+
+    public boolean isBobberInWater(){
+        if(client.player != null && client.world != null && client.player.fishHook != null) {
+            return client.player.fishHook.isTouchingWater();
+        } else{
+            return false;
         }
     }
 
