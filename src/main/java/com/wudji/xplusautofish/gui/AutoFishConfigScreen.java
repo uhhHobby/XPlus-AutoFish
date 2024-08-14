@@ -1,6 +1,6 @@
 package com.wudji.xplusautofish.gui;
 
-import com.wudji.xplusautofish.ForgeModXPlusAutofish;
+import com.wudji.xplusautofish.NeoForgedModXPlusAutofish;
 import com.wudji.xplusautofish.config.Config;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
@@ -18,7 +18,7 @@ public class AutoFishConfigScreen {
         else return (Component.translatable("options.autofish.toggle.off"));
     };
 
-    public static Screen buildScreen(ForgeModXPlusAutofish modAutofish, Screen parentScreen) {
+    public static Screen buildScreen(NeoForgedModXPlusAutofish modAutofish, Screen parentScreen) {
 
         Config defaults = new Config();
         Config config = modAutofish.getConfig();

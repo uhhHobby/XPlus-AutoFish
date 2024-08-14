@@ -2,6 +2,7 @@ package com.wudji.xplusautofish.mointor;
 
 import com.wudji.xplusautofish.XPlusAutofish;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.util.Mth;
@@ -10,11 +11,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
 
 public class FishMonitorMPMotion implements FishMonitorMP{
     // The threshold of detecting a bobber moving downwards, to detect as a fish.
-    public static final int PACKET_MOTION_Y_THRESHOLD = -350;
+    public static final double PACKET_MOTION_Y_THRESHOLD = -0.1;
 
     // Start catching fish after a 1-second threshold of hitting water.
     public static final int START_CATCHING_AFTER_THRESHOLD = 1000;

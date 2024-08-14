@@ -5,23 +5,23 @@ import com.wudji.xplusautofish.mointor.FishMonitorMP;
 import com.wudji.xplusautofish.mointor.FishMonitorMPMotion;
 import com.wudji.xplusautofish.mointor.FishMonitorMPSound;
 import com.wudji.xplusautofish.scheduler.ActionType;
-import net.minecraft.client.Minecraft;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
+import net.minecraft.util.StringUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.item.FishingRodItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.FishingRodItem;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.Objects;
@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 
 public class XPlusAutofish {
     private Minecraft client;
-    private ForgeModXPlusAutofish modAutofish;
+    private NeoForgedModXPlusAutofish modAutofish;
     private FishMonitorMP fishMonitorMP;
 
     private boolean hookExists = false;
@@ -40,7 +40,7 @@ public class XPlusAutofish {
 
     public long timeMillis = 0L;
 
-    public XPlusAutofish(ForgeModXPlusAutofish modAutofish) {
+    public XPlusAutofish(NeoForgedModXPlusAutofish modAutofish) {
         this.modAutofish = modAutofish;
         this.client = Minecraft.getInstance();
         setDetection();

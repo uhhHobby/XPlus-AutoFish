@@ -1,13 +1,13 @@
 package com.wudji.xplusautofish.scheduler;
 
-import com.wudji.xplusautofish.ForgeModXPlusAutofish;
+import com.wudji.xplusautofish.NeoForgedModXPlusAutofish;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AutofishScheduler {
-    private ForgeModXPlusAutofish modAutofish;
+    private NeoForgedModXPlusAutofish modAutofish;
     //Actions that run once then delete from queue
     private List<Action> queuedActions = new ArrayList<>();
     //Actions that repeat indefinitely
@@ -16,7 +16,7 @@ public class AutofishScheduler {
     //For tracking world change events. This is used to reset repeating action timers when a world is joined
     private boolean doesWorldExist;
 
-    public AutofishScheduler(ForgeModXPlusAutofish modAutofish) {
+    public AutofishScheduler(NeoForgedModXPlusAutofish modAutofish) {
         this.modAutofish = modAutofish;
     }
 

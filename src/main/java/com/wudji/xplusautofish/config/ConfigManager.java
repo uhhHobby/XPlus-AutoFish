@@ -2,8 +2,8 @@ package com.wudji.xplusautofish.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.wudji.xplusautofish.ForgeModXPlusAutofish;
-import net.minecraftforge.fml.loading.FMLPaths;
+import com.wudji.xplusautofish.NeoForgedModXPlusAutofish;
+import net.neoforged.fml.loading.FMLPaths;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -14,13 +14,13 @@ import java.util.concurrent.Executors;
 public class ConfigManager {
     private Config config;
 
-    private ForgeModXPlusAutofish modAutofish;
+    private NeoForgedModXPlusAutofish modAutofish;
     private Gson gson;
     private File configFile;
 
     private Executor executor = Executors.newSingleThreadExecutor();
 
-    public ConfigManager(ForgeModXPlusAutofish modAutofish) {
+    public ConfigManager(NeoForgedModXPlusAutofish modAutofish) {
         this.modAutofish = modAutofish;
         this.gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         this.configFile = new File(FMLPaths.CONFIGDIR.get().toFile(), "autofish.config");
