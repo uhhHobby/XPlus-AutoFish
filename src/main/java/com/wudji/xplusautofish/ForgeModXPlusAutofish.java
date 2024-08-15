@@ -1,6 +1,5 @@
 package com.wudji.xplusautofish;
 
-import com.mojang.logging.LogUtils;
 import com.wudji.xplusautofish.config.Config;
 import com.wudji.xplusautofish.config.ConfigManager;
 import com.wudji.xplusautofish.gui.AutoFishConfigScreen;
@@ -8,11 +7,12 @@ import com.wudji.xplusautofish.scheduler.AutofishScheduler;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import net.minecraft.world.entity.Entity;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.IExtensionPoint;
@@ -21,19 +21,16 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.lwjgl.glfw.GLFW;
-import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("autofish")
 public class ForgeModXPlusAutofish {
 
-    // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
-
     private static ForgeModXPlusAutofish instance;
     private XPlusAutofish autofish;
     private AutofishScheduler scheduler;
-    private KeyMapping autofishGuiKey;
+    public static final Lazy<KeyMapping> autofishGuiKey = Lazy.of(() ->
+            new KeyMapping("key.autofish.open_gui", GLFW.GLFW_KEY_V, "XPlus Autofish"));
     private ConfigManager configManager;
 
     public ForgeModXPlusAutofish() {
@@ -48,27 +45,28 @@ public class ForgeModXPlusAutofish {
 
         //Create ConfigManager
         this.configManager = new ConfigManager(this);
-        //Register Keybinding
-        autofishGuiKey = new KeyMapping("key.autofish.open_gui", GLFW.GLFW_KEY_V, "Autofish");
         //Create Scheduler instance
         this.scheduler = new AutofishScheduler(this);
         //Create Autofisher instance
         this.autofish = new XPlusAutofish(this);
     }
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void registerBindings(RegisterKeyMappingsEvent event) {
-        event.register(autofishGuiKey);
-    }
 
     @SubscribeEvent
     public void tick(TickEvent.ClientTickEvent event) {
         Minecraft client = Minecraft.getInstance();
-        if (autofishGuiKey.isDown()) {
+        if (autofishGuiKey.get().isDown()) {
             client.setScreen(AutoFishConfigScreen.buildScreen(this, client.screen));
         }
         autofish.tick(client);
         scheduler.tick(client);
+    }
+
+    @Mod.EventBusSubscriber(modid = "autofish", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    public static class MyStaticClientOnlyEventHandler {
+        @SubscribeEvent
+        public static void registerBindings(RegisterKeyMappingsEvent event) {
+            event.register(autofishGuiKey.get());
+        }
     }
 
     /**
