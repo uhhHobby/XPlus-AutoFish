@@ -64,12 +64,15 @@ public class NeoForgedModXPlusAutofish
 
     @SubscribeEvent
     public void tick(ClientTickEvent.Post event) {
-        Minecraft client = Minecraft.getInstance();
-        if (CONFIG_SCREEN_MAPPING.get().isDown()) {
-            client.setScreen(AutoFishConfigScreen.buildScreen(this, client.screen));
+        if (this.autofish != null){
+            Minecraft client = Minecraft.getInstance();
+            if (CONFIG_SCREEN_MAPPING.get().isDown()) {
+                client.setScreen(AutoFishConfigScreen.buildScreen(this, client.screen));
+            }
+            autofish.tick(client);
+            scheduler.tick(client);
         }
-        autofish.tick(client);
-        scheduler.tick(client);
+
     }
 
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)

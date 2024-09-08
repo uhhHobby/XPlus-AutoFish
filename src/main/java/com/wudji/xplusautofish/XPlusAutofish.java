@@ -57,7 +57,6 @@ public class XPlusAutofish {
     }
 
     public void tick(Minecraft client) {
-
         if (client.level != null && client.player != null && modAutofish.getConfig().isAutofishEnabled()) {
 
             timeMillis = Util.getMillis(); //update current working time for this tick
