@@ -48,12 +48,15 @@ public class Autofish {
         //Initiate the repeating action for persistent mode casting
         modAutofish.getScheduler().scheduleRepeatingAction(10000, () -> {
             if(!modAutofish.getConfig().isPersistentMode()) return;
+            if(modAutofish.getConfig().isNoBreak() && getHeldItem().getDamage() >= 63) return;
             if(!isHoldingFishingRod()) return;
             if(hookExists){
                 if(isBobberInWater()) return;
+
                 else useRod();
             }
             if(modAutofish.getScheduler().isRecastQueued()) return;
+
             useRod();
         });
     }
@@ -260,7 +263,7 @@ public class Autofish {
                 actionResult = client.interactionManager.interactItem(client.player, hand);
             }
             if (actionResult != null && actionResult.isAccepted()) {
-                if (actionResult.shouldSwingHand()) {
+                if (actionResult == ActionResult.SUCCESS) {
                     client.player.swingHand(hand);
                 }
                 client.gameRenderer.firstPersonRenderer.resetEquipProgress(hand);

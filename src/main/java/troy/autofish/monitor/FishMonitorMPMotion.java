@@ -46,7 +46,7 @@ public class FishMonitorMPMotion implements FishMonitorMP {
     @Override
     public void handlePacket(Autofish autofish, Packet<?> packet, MinecraftClient minecraft) {
         if (packet instanceof EntityVelocityUpdateS2CPacket velocityPacket) {
-            if (minecraft.player != null && minecraft.player.fishHook != null && minecraft.player.fishHook.getId() == velocityPacket.getId()) {
+            if (minecraft.player != null && minecraft.player.fishHook != null && minecraft.player.fishHook.getId() == velocityPacket.getEntityId()) {
                 // Wait until the bobber has rose in the water.
                 // Prevent remarking the bobber rise timestamp until it is reset by catching.
                 if (hasHitWater && bobberRiseTimestamp == 0 && velocityPacket.getVelocityY() > 0) {
