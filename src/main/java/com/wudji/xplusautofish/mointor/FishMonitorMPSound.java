@@ -31,7 +31,7 @@ public class FishMonitorMPSound implements FishMonitorMP{
             if (packet instanceof ClientboundSoundPacket) {
                 ClientboundSoundPacket soundPacket = (ClientboundSoundPacket) packet;
                 SoundEvent soundEvent = soundPacket.getSound().value();
-                soundName = soundEvent.getLocation().toString();
+                soundName = soundEvent.location().toString();
                 x = soundPacket.getX();
                 y = soundPacket.getY();
                 z = soundPacket.getZ();

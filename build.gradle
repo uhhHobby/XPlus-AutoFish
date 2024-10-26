@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.150'
+    id 'net.neoforged.gradle.userdev' version '7.0.165'
 }
 
 version = mod_version + "-mc" + minecraft_version
@@ -92,7 +92,7 @@ dependencies {
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
-    implementation "me.shedaniel.cloth:cloth-config-neoforge:15.0.130"
+    implementation "me.shedaniel.cloth:cloth-config-neoforge:16.0.141"
     // Example mod dependency using a file as dependency
     // implementation files("libs/coolmod-${mc_version}-${coolmod_version}.jar")
 

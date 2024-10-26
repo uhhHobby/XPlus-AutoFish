@@ -49,6 +49,7 @@ public class XPlusAutofish {
         modAutofish.getScheduler().scheduleRepeatingAction(10000, () -> {
             if(!modAutofish.getConfig().isPersistentMode()) return;
             if(!isHoldingFishingRod()) return;
+            if(modAutofish.getConfig().isNoBreak() && Objects.requireNonNull(getHeldItem()).getDamageValue() >= 63) return;
             if(hookExists){
                 if(isBobberInWater()) return;
                 else useRod();
@@ -223,7 +224,7 @@ public class XPlusAutofish {
                 actionResult = client.gameMode.useItem(client.player, hand);
             }
             if (actionResult != null && actionResult.consumesAction()) {
-                if (actionResult.shouldSwing()) {
+                if (actionResult == InteractionResult.SUCCESS) {
                     client.player.swing(hand);
                 }
                 client.gameRenderer.itemInHandRenderer.itemUsed(hand);
