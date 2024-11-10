@@ -46,7 +46,7 @@ public class XPlusAutofish {
         setDetection();
 
         //Initiate the repeating action for persistent mode casting
-        modAutofish.getScheduler().scheduleRepeatingAction(10000, () -> {
+        modAutofish.getScheduler().scheduleRepeatingAction(20000, () -> {
             if(!modAutofish.getConfig().isPersistentMode()) return;
             if(!isHoldingFishingRod()) return;
             if(hookExists && isBobberInWater()) return;
